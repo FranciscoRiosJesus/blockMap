@@ -1,0 +1,138 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Devoto LSA - Map</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script>
+      function initMap() {
+        //Map
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 15,
+          center: { lat: -34.568, lng: -58.468 },
+          mapTypeId: "terrain",
+        });
+
+        //Load GeoJson
+        map.data.loadGeoJson(
+          "./blockData.json"
+        );
+
+        fetch('./blockData.json')
+          .then((response) => response.json())
+          .then((json) => console.log(json));
+
+        //Get location
+        infoWindow = new google.maps.InfoWindow();
+
+        const locationButton = document.createElement("button");
+
+        locationButton.textContent = "My ubicación";
+        locationButton.classList.add("custom-map-control-button");
+        map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
+        locationButton.addEventListener("click", () => {
+          // Try HTML5 geolocation.
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                const pos = {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                };
+
+                infoWindow.setPosition(pos);
+                infoWindow.setContent("Location found.");
+                infoWindow.open(map);
+                map.setCenter(pos);
+              },
+              () => {
+                handleLocationError(true, infoWindow, map.getCenter());
+              },
+            );
+          } else {
+            // Browser doesn't support Geolocation
+            handleLocationError(false, infoWindow, map.getCenter());
+          }
+        });
+
+        // Define the LatLng coordinates for the polygon's path.
+        const blockCoords = [
+          { lat: -34.5360785, lng: -58.4680514 },
+          { lat: -34.5363889, lng: -58.4679314 },
+          { lat: -34.5360757, lng: -58.4672273 },
+          { lat: -34.5360348, lng: -58.4672649 },
+          { lat: -34.5360033, lng: -58.4673111 },
+          { lat: -34.5359674, lng: -58.4673769 },
+          { lat: -34.5359525, lng: -58.4674144 },
+          { lat: -34.5359404, lng: -58.4674935 },
+          { lat: -34.535958,  lng: -58.4676699 },
+          { lat: -34.5360785, lng: -58.4680514 },
+        ];
+        // Construct the polygon.
+        const blockPoligon = new google.maps.Polygon({
+          paths: blockCoords,
+          strokeColor: "#FF0000",
+          strokeOpacity: 0.8,
+          strokeWeight: 2,
+          fillColor: "#FF0000",
+          fillOpacity: 0.35,
+        });
+
+        blockPoligon.addListener("click", () => {
+          map.setZoom(15); 
+        })
+
+        blockPoligon.setMap(map);
+      }
+
+      window.initMap = initMap;
+    </script>
+    <style>
+      #map {
+        height: 100%;
+      }
+
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+
+      .custom-map-control-button {
+        background-image: linear-gradient(92.88deg, #455EB5 9.16%, #5643CC 43.89%, #673FD7 64.72%);
+        border-radius: 8px;
+        border-style: none;
+        box-sizing: border-box;
+        color: #FFFFFF;
+        cursor: pointer;
+        flex-shrink: 0;
+        font-family: "Inter UI","SF Pro Display",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Open Sans","Helvetica Neue",sans-serif;
+        font-size: 16px;
+        font-weight: 500;
+        height: 4rem;
+        padding: 0 1.6rem;
+        text-align: center;
+        text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+        transition: all .5s;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        margin: 2%;
+      }
+
+      .custom-map-control-button:hover {
+        box-shadow: rgba(80, 63, 205, 0.5) 0 1px 30px;
+        transition-duration: .1s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzh2NW-RYYyGaF4PdnQoOWfJ5UoNpSjiM&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
+    
