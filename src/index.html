@@ -15,10 +15,10 @@
 
         //Load GeoJson
         map.data.loadGeoJson(
-          "./blockData.json"
+          "./data/blockData.json"
         );
 
-        fetch('./blockData.json')
+        fetch('./data/blockData.json')
           .then((response) => response.json())
           .then((json) => console.log(json));
 
