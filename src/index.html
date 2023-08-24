@@ -8,25 +8,24 @@
       function initMap() {
         //Map
         const map = new google.maps.Map(document.getElementById("map"), {
-          zoom: 15,
+          zoom: 17,
           center: { lat: -34.568, lng: -58.468 },
           mapTypeId: "terrain",
         });
 
-        //Load GeoJson
+        //Load all blocks GeoJson
         map.data.loadGeoJson(
           "./data/blockData.json"
         );
 
+        //console log of GeoJson
         fetch('./data/blockData.json')
           .then((response) => response.json())
           .then((json) => console.log(json));
 
         //Get location
         infoWindow = new google.maps.InfoWindow();
-
         const locationButton = document.createElement("button");
-
         locationButton.textContent = "My ubicación";
         locationButton.classList.add("custom-map-control-button");
         map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
@@ -72,12 +71,13 @@
         const blockPoligon = new google.maps.Polygon({
           paths: blockCoords,
           strokeColor: "#FF0000",
-          strokeOpacity: 0.8,
-          strokeWeight: 2,
+          strokeOpacity: 0.4,
+          strokeWeight: 0,
           fillColor: "#FF0000",
           fillOpacity: 0.35,
         });
 
+        //Click TODO: form census
         blockPoligon.addListener("click", () => {
           map.setZoom(15); 
         })
