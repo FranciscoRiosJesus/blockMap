@@ -13,12 +13,7 @@
         mapTypeId: "terrain",
       });
 
-      /*
-      //Load all blocks GeoJson
-      map.data.loadGeoJson(
-        "./data/blockData.json"
-      );
-      */
+      infoWindow = new google.maps.InfoWindow();
 
       //console log of GeoJson
       fetch('./data/blockData.json')
@@ -29,24 +24,37 @@
           return response.json()
         })
         .then((json) => {
-          console.log(json);
           json.features.forEach(block => {
+            function getPaths(points) {
+              let paths = [];
+              points.forEach(point => {
+                paths.push({ lat: point[1], lng: point[0] })
+              })
+              return paths
+            }
+
+            console.log(block.geometry.coordinates[0])
             //create a polygon
+            const paths = getPaths(block.geometry.coordinates[0]);
             const blockPoligon = new google.maps.Polygon({
-              paths: block.geometry.coordinates,
+              paths: paths,
               strokeColor: block.properties.strokeColor ? block.properties.strokeColor : "#FF0000",
               strokeOpacity: block.properties.strokeOpacity ? block.properties.strokeOpacity : 0.4,
               strokeWeight: block.properties.strokeWeight ? block.properties.strokeWeight : 0,
               fillColor: block.properties.fillColor ? block.properties.fillColor : "#FF0000",
               fillOpacity: block.properties.fillOpacity ? block.properties.fillOpacity : 0.35,
             });
+            
 
             //Click TODO: form census IN CONTENT
             blockPoligon.addListener("click", () => {
-              infoWindow = new google.maps.InfoWindow();
+              infoWindow.setPosition(paths[0]);
               infoWindow.setContent(block.properties.Name);
-              infoWindow.open(map);
-              map.setCenter(block.geometry.coordinates[0]);
+              console.log(block.properties.Name);
+              infoWindow.open({
+                map
+              });
+              map.setCenter(paths[0]);
             })
 
             //SET IN MAP
@@ -56,7 +64,7 @@
         );
 
       //Get location
-      infoWindow = new google.maps.InfoWindow();
+      
       const locationButton = document.createElement("button");
       locationButton.textContent = "My ubicación";
       locationButton.classList.add("custom-map-control-button");
