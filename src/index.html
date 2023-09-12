@@ -13,6 +13,7 @@
         mapTypeId: "terrain",
       });
 
+      // LOCATION PLACE CENTER
       window.setTimeout(() => {
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -40,7 +41,7 @@
 
       infoWindow = new google.maps.InfoWindow();
 
-      //console log of GeoJson
+      //FECHING DE DATOS
       fetch('./data/blockData.json')
         .then((response) => {
           if (!response.ok) {
@@ -114,7 +115,7 @@
             blockPoligon.setMap(map);
           })
         }
-        );
+      );
 
       //Get location
 
