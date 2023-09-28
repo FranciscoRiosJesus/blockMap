@@ -253,7 +253,7 @@ function geolocationMarker(map) {
                 userMarker.setPosition(pos);
             }
 
-            map.setCenter(pos);
+            //map.setCenter(pos);
         },
             (error) => {
                 console.error(error);
