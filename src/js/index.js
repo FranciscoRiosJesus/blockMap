@@ -307,17 +307,17 @@ function getColorDescription(map) {
 
     const yellowDescription = document.createElement("div");
     parent.appendChild(yellowDescription);
-    yellowDescription.textContent = "Amarillo: Hecho hace 60 días";
+    yellowDescription.textContent = "Amarillo: Hecho hace 120 días";
     yellowDescription.classList.add("yellow-description");
 
     const orangeDescription = document.createElement("div");
     parent.appendChild(orangeDescription);
-    orangeDescription.textContent = "Naranja: Hecho hace 120 días";
+    orangeDescription.textContent = "Naranja: Hecho hace 60 días";
     orangeDescription.classList.add("orange-description");
 
     const redDescription = document.createElement("div");
     parent.appendChild(redDescription);
-    redDescription.textContent = "Rojo: Hecho hace 360 días";
+    redDescription.textContent = "Rojo: Hecho hace menos de 60 días";
     redDescription.classList.add("red-description");
 
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(parent);
