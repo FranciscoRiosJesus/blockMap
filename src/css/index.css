@@ -98,3 +98,49 @@ body {
     -webkit-box-shadow: 13px 33px 191px 50px rgba(0, 241, 255, 0.48);
     -moz-box-shadow: 13px 33px 191px 50px rgba(0, 241, 255, 0.48);
 }
+
+.descriptions {
+    font-family: "Inter UI", "SF Pro Display", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    gap: 15px;
+}
+
+.green-description {
+    color:white;
+    background-color: #00B50B;
+    width: 125px;
+    height: 85px;
+    padding: 3%;
+    border-radius: 6%;
+}
+
+.yellow-description {
+    color: white;
+    background-color: #dede1a;
+    width: 125px;
+    height: 85px;
+    padding: 3%;
+    border-radius: 6%;
+}
+
+.orange-description {
+    color: white;
+    background-color: #FFA500;
+    width: 125px;
+    height: 85px;
+    padding: 3%;
+    border-radius: 6%;
+}
+
+.red-description {
+    color: white;
+    background-color: #FF0000;
+    width: 125px;
+    height: 85px;
+    padding: 3%;
+    border-radius: 6%;
+}

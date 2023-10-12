@@ -19,6 +19,8 @@ function initMap() {
 
     getLocationButton(map);
 
+    getColorDescription(map);
+
 }
 
 window.initMap = initMap;
@@ -90,21 +92,25 @@ function createPolygons(terr, map) {
             fillOpacity: 0.35,
         });
 
-        blockPoligon.addListener("click", async () => {
-            await setInfoWindowContent(block, infoWindow, map, paths);
-
-            let button = document.querySelector(".button");
-            if (!button) {
-                window.setTimeout(() => {
-                    button = document.querySelector(".button");
-                }, 9000);
-            }
-            button.addEventListener("click", () => {
-                handleButtonClick(block.properties.Name, terr, blockPoligon, map)
-            })
-        })
+        blockPoligon.addListener("click", async () =>
+            createInfoWindow(block, infoWindow, map, paths, terr, blockPoligon));
 
         blockPoligon.setMap(map);
+    })
+}
+
+async function createInfoWindow(block, infoWindow, map, paths, terr, blockPoligon) {
+    await setInfoWindowContent(block, infoWindow, map, paths);
+
+    let button = document.querySelector(".button");
+    if (!button) {
+        window.setTimeout(() => {
+            button = document.querySelector(".button");
+        }, 9000);
+    }
+    button.addEventListener("click", async () => {
+        handleButtonClick(block.properties.Name, terr, blockPoligon, map)
+        await createInfoWindow(block, infoWindow, map, paths, terr, blockPoligon);
     })
 }
 
@@ -131,7 +137,7 @@ async function setInfoWindowContent(block, infoWindow, map, paths) {
 }
 
 function getDate(date) {
-    return date ? formatDate(date?.split("T")[0]) : 'Indefinida'
+    return date ? formatDate(date?.split("T")[0]) : 'Aun no censada'
 }
 
 function formatDate(date) {
@@ -288,4 +294,31 @@ function getLocationButton(map) {
             handleLocationError(false, infoWindow, map.getCenter());
         }
     });
+}
+
+function getColorDescription(map) {
+    const parent = document.createElement("div");
+    parent.classList.add("descriptions");
+
+    const greenDescription = document.createElement("div");
+    parent.appendChild(greenDescription);
+    greenDescription.textContent = "Verde: Censar";
+    greenDescription.classList.add("green-description");
+
+    const yellowDescription = document.createElement("div");
+    parent.appendChild(yellowDescription);
+    yellowDescription.textContent = "Amarillo: Hecho hace 60 días";
+    yellowDescription.classList.add("yellow-description");
+
+    const orangeDescription = document.createElement("div");
+    parent.appendChild(orangeDescription);
+    orangeDescription.textContent = "Naranja: Hecho hace 120 días";
+    orangeDescription.classList.add("orange-description");
+
+    const redDescription = document.createElement("div");
+    parent.appendChild(redDescription);
+    redDescription.textContent = "Rojo: Hecho hace 360 días";
+    redDescription.classList.add("red-description");
+
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(parent);
 }
