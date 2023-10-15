@@ -115,7 +115,7 @@ async function createInfoWindow(block, infoWindow, map, paths, terr, blockPoligo
 }
 
 async function setInfoWindowContent(block, infoWindow, map, paths) {
-    infoWindow.setPosition(paths[0]);
+    infoWindow.setPosition(getCenter(paths));
     await infoWindow.setContent(
         '<form class="form" action="">' +
         '<div class="name"> Territorio: ' + block.properties.Name.split(":")[0] +
@@ -133,7 +133,19 @@ async function setInfoWindowContent(block, infoWindow, map, paths) {
     infoWindow.open({
         map
     });
-    map.setCenter(paths[0]);
+    map.setCenter(getCenter(paths));
+}
+
+function getCenter(paths) {
+    let lat = 0;
+    let lng = 0;
+
+    paths.forEach(point => {
+        lat += point.lat;
+        lng += point.lng;
+    })
+
+    return { lat: lat / paths.length, lng: lng / paths.length }
 }
 
 function getDate(date) {
@@ -148,7 +160,8 @@ function getFillColorOfBlock(dateUpdate, territory) {
     const VERDE = {
         "1A": "#00B50B",
         "1B": "#4CBD49",
-        "2": "#447C5F",
+        "2A": "#447C5F",
+        "2B": "#399A2D",
         "3": "#3B7B4E",
         "4": "#406A3D",
         "5": "#3D5B2C",
@@ -305,20 +318,20 @@ function getColorDescription(map) {
     greenDescription.textContent = "Verde: Censar";
     greenDescription.classList.add("green-description");
 
-    const yellowDescription = document.createElement("div");
-    parent.appendChild(yellowDescription);
-    yellowDescription.textContent = "Amarillo: Hecho hace 120 días";
-    yellowDescription.classList.add("yellow-description");
+    const redDescription = document.createElement("div");
+    parent.appendChild(redDescription);
+    redDescription.textContent = "Rojo: Hecho hace 1 mes";
+    redDescription.classList.add("red-description");
 
     const orangeDescription = document.createElement("div");
     parent.appendChild(orangeDescription);
-    orangeDescription.textContent = "Naranja: Hecho hace 60 días";
+    orangeDescription.textContent = "Naranja: Hecho hace 3 meses";
     orangeDescription.classList.add("orange-description");
-
-    const redDescription = document.createElement("div");
-    parent.appendChild(redDescription);
-    redDescription.textContent = "Rojo: Hecho hace menos de 60 días";
-    redDescription.classList.add("red-description");
+    
+    const yellowDescription = document.createElement("div");
+    parent.appendChild(yellowDescription);
+    yellowDescription.textContent = "Amarillo: Hecho hace 6 meses";
+    yellowDescription.classList.add("yellow-description");
 
     map.controls[google.maps.ControlPosition.TOP_CENTER].push(parent);
 }
